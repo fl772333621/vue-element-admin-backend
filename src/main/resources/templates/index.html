@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <!-- 必须引入jquery否则无法使用ajax -->
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    function  doSubmit() {
+        $.ajax({
+            type: "POST",
+            url: "/doLogin",
+            contentType: "application/x-www-form-urlencoded",
+            data : {
+                username: document.getElementById("username").value,
+                password: document.getElementById("password").value
+            },
+            success: function(result) {
+                document.getElementById("token").value = result;
+            }
+        });
+    }
+    function  hello() {
+        $.ajax({
+            type: "POST",
+            url: "/hello",
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function(request) {
+                request.setRequestHeader("X-Token", document.getElementById("token").value);
+            },
+            success: function(result) {
+                document.getElementById("helloMessage").value = result;
+            },
+            error:function (data, status, e){
+                alert("token 异常，请重新获取 token 再执行！");
+            }
+        });
+    }
+    function  helloPermitAll() {
+        $.ajax({
+            type: "POST",
+            url: "/helloPermitAll",
+            contentType: "application/x-www-form-urlencoded",
+            success: function(result) {
+                document.getElementById("helloPermitAllMessage").value = result;
+            },
+            error:function (data, status, e){
+                alert("error");
+            }
+        });
+    }
+    </script>
+</head>
+<body>
+<h1>登陆，获取 token（目前仅校验username和password长度是否相等）</h1>
+username <input type="text" id="username" name="username" value="username"/>
+<br/>
+password <input type="text" id="password" name="password" value="password"/>
+<br/>
+<button type="button" class="submitButton" th:onclick="'javascript:doSubmit();'">获取 token</button>
+<br/>
+<h1>全局 token</h1>
+<textarea id="token"></textarea>
+<br/>
+
+<h1>带 token 的 POST 请求（无 token 请求异常）</h1>
+hello
+<button type="button" class="hello" th:onclick="'javascript:hello();'">hello</button>
+<input type="text" id="helloMessage" name="helloMessage"/>
+<br/>
+
+<h1>不带 token 的 POST 请求（无 token 可请求并返回结果）</h1>
+hello
+<button type="button" class="helloPermitAll" th:onclick="'javascript:helloPermitAll();'">helloPermitAll</button>
+<input type="text" id="helloPermitAllMessage" name="helloMessage"/>
+</body>
+</html>

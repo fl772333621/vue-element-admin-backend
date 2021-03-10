@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * 返回用，JSON响应对象体
+ *
  * @author mengwei
  */
 @Getter

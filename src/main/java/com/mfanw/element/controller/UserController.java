@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mfanw.element.configuration.jwt.JwtUserDetailsServiceImpl;
+import com.mfanw.element.enums.EnumErrorResult;
 import com.mfanw.element.util.JsonResult;
 import com.mfanw.element.util.JwtTokenUtil;
 import org.apache.commons.collections.MapUtils;
@@ -36,7 +37,7 @@ public class UserController {
         String password = MapUtils.getString(jsonParam, "password", "admin");
         final UserDetails userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(username);
         if (username.length() != password.length()) {
-            return JsonResult.fail(-1, "密码错误，请重新输入！");
+            return JsonResult.fail(EnumErrorResult.LOGIN_PASSWORD_ERROR);
         }
         Map<String, String> data = Maps.newHashMap();
         data.put("token", jwtTokenUtil.generateToken(userDetails));

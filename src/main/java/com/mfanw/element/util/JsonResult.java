@@ -1,5 +1,6 @@
 package com.mfanw.element.util;
 
+import com.mfanw.element.enums.EnumErrorResult;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +13,9 @@ import lombok.ToString;
 @ToString
 public class JsonResult {
 
+    /**
+     * 默认的成功的code码
+     */
     private static final int CODE_SUCCESS = 20000;
 
     private int code = CODE_SUCCESS;
@@ -26,10 +30,10 @@ public class JsonResult {
         return result;
     }
 
-    public static JsonResult fail(int code, String message) {
+    public static JsonResult fail(EnumErrorResult errorResult) {
         JsonResult result = new JsonResult();
-        result.setCode(code);
-        result.setMessage(message);
+        result.setCode(errorResult.getCode());
+        result.setMessage(errorResult.getMessage());
         return result;
     }
 }

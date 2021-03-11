@@ -1,18 +1,25 @@
 package com.mfanw.element.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mfanw.element.configuration.jwt.JwtUserDetailsServiceImpl;
+import com.mfanw.element.dao.convertor.Entity2FormConvertor;
+import com.mfanw.element.dao.entity.SecurityRoleEntity;
+import com.mfanw.element.dao.entity.SecurityUserEntity;
+import com.mfanw.element.dao.mapper.SecurityRoleMapper;
+import com.mfanw.element.dao.mapper.SecurityUserMapper;
 import com.mfanw.element.enums.EnumErrorResult;
 import com.mfanw.element.util.JsonResult;
 import com.mfanw.element.util.JwtTokenUtil;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,13 +29,19 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/vue-element-admin/user")
-public class UserController {
+public class SecurityUserController {
 
     @Autowired
     private JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private SecurityRoleMapper securityRoleMapper;
+
+    @Autowired
+    private SecurityUserMapper securityUserMapper;
 
     @PostMapping("/login")
     @ResponseBody
@@ -53,11 +66,20 @@ public class UserController {
     @GetMapping("/info")
     @ResponseBody
     public JsonResult info(String token) {
-        Map<String, Object> data = Maps.newHashMap();
-        data.put("roles", Lists.newArrayList("admin"));
-        data.put("introduction", "I am a super administrator");
-        data.put("avatar", "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif");
-        data.put("name", "super admin");
-        return JsonResult.success(data);
+        final String username = jwtTokenUtil.getUsernameFromToken(token);
+        if (StringUtils.isBlank(username)) {
+            return JsonResult.fail(EnumErrorResult.USERNAME_NOT_FOUND);
+        }
+        final SecurityUserEntity securityUserEntity = securityUserMapper.getByUsername(username);
+        if (StringUtils.isBlank(username)) {
+            return JsonResult.fail(EnumErrorResult.USERNAME_NOT_FOUND);
+        }
+        final List<SecurityRoleEntity> securityRoleEntities = securityRoleMapper.getListByUserId(securityUserEntity.getId());
+        if (CollectionUtils.isEmpty(securityRoleEntities)) {
+            return JsonResult.fail(EnumErrorResult.USER_ROLE_MISSING);
+        }
+        return JsonResult.success(Entity2FormConvertor.buildSecurityUserForm(securityUserEntity, securityRoleEntities));
     }
+
+
 }

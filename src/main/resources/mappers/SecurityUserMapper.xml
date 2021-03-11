@@ -5,17 +5,20 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
-        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="note" jdbcType="VARCHAR" property="note"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="introduction" jdbcType="VARCHAR" property="introduction"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
+
     <sql id="BaseColumnList">
-        id, username, password, icon, email, nick_name, note, create_time, login_time, status
+        id, username, password, name, avatar, email, introduction, createTime, modifyTime, status
     </sql>
-    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+    <select id="getByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
         <include refid="BaseColumnList"/>
         FROM security_user

@@ -1,24 +1,17 @@
-package com.mfanw.element.dao.entity;
+package com.mfanw.element.form;
 
-import com.mfanw.element.form.BaseForm;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
-/**
- * 用户权限校验实体类（包含用户、密码、角色）
- *
- * @author mengwei
- */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
-public class SecurityUserEntity extends BaseForm {
-
-    private static final long serialVersionUID = -5633052258669173203L;
+@Getter
+@Setter
+@ToString
+public class SecurityUserForm extends BaseForm {
 
     @ApiModelProperty(value = "用户ID")
     private Long id;
@@ -49,4 +42,7 @@ public class SecurityUserEntity extends BaseForm {
 
     @ApiModelProperty(value = "启用状态：0->禁用；1->启用")
     private Integer status;
+
+    @ApiModelProperty(value = "用户角色")
+    private List<String> roles;
 }

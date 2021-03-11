@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mfanw.element.dao.mapper.SecurityRouteMapper">
+    <resultMap id="BaseResultMap" type="com.mfanw.element.dao.entity.SecurityRouteEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="component" jdbcType="VARCHAR" property="component"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modifyTime" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="roles" jdbcType="VARCHAR" property="roles"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        id, parentId, path, name, component, title, icon, createTime, modifyTime, status
+    </sql>
+
+    <sql id="BaseColumnListWithName">
+        t.id, t.parentId, t.path, t.name, t.component, t.title, t.icon, t.createTime, t.modifyTime, t.status
+    </sql>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM security_route
+        WHERE id = #{id, jdbcType=BIGINT}
+    </select>
+
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnListWithName"/>, GROUP_CONCAT(security_role.`key`) as roles
+        FROM security_route t, security_role_route, security_role
+        WHERE t.id = security_role_route.routeId
+        AND security_role_route.roleId = security_role.id
+        GROUP BY t.id
+    </select>
+</mapper>

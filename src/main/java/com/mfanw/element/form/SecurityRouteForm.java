@@ -1,6 +1,5 @@
-package com.mfanw.element.dao.entity;
+package com.mfanw.element.form;
 
-import com.mfanw.element.form.BaseForm;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,27 +7,25 @@ import lombok.ToString;
 
 import java.util.Date;
 
-/**
- * @author mengwei
- */
 @Getter
 @Setter
 @ToString
-public class SecurityRoleEntity extends BaseForm {
+public class SecurityRouteForm extends BaseForm {
 
-    private static final long serialVersionUID = 5188936337858084402L;
-
-    @ApiModelProperty(value = "角色ID")
+    @ApiModelProperty(value = "页面ID")
     private Long id;
 
-    @ApiModelProperty(value = "角色key")
-    private String key;
+    @ApiModelProperty(value = "页面路径")
+    private String path;
 
-    @ApiModelProperty(value = "角色名称")
+    @ApiModelProperty(value = "页面名称")
     private String name;
 
-    @ApiModelProperty(value = "角色描述")
-    private String description;
+    @ApiModelProperty(value = "页面组件")
+    private String component;
+
+    @ApiModelProperty(value = "页面meta")
+    private SecurityRouteMetaForm meta;
 
     @ApiModelProperty(value = "创建时间")
     private Date createTime;

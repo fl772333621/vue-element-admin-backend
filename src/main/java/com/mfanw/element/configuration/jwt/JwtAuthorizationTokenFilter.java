@@ -1,6 +1,7 @@
 package com.mfanw.element.configuration.jwt;
 
 import com.mfanw.element.util.JwtTokenUtil;
+import com.mfanw.element.util.ThreadLocalUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         LOGGER.warn(request.getMethod() + " ," + request.getRequestURI() + ", authToken=" + authToken);
         if (!request.getMethod().equals("OPTIONS") && authToken != null) {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
+            ThreadLocalUtil.getInstance().setUsername(username);
             LOGGER.warn("username=" + username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(username);

@@ -15,13 +15,15 @@ public interface SecurityRoleMapper {
 
     void delete(Long key);
 
+    void update(SecurityRoleEntity securityRoleEntity);
+
     /**
      * 根据角色ID获取角色实体
      *
-     * @param id 角色ID
+     * @param key 角色key
      * @return 角色实体
      */
-    SecurityRoleEntity getById(long id);
+    SecurityRoleEntity getById(long key);
 
     List<SecurityRoleEntity> getList();
 

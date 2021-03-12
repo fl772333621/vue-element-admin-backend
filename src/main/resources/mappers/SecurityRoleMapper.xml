@@ -22,17 +22,28 @@
         INSERT INTO
         security_role (name, description)
         VALUES (#{name, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR})
+        <selectKey keyProperty="key" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
     </insert>
 
     <delete id="delete" parameterType="java.lang.Long">
-        DELETE FROM security_role WHERE key = #{key, jdbcType=BIGINT}
+        DELETE FROM security_role WHERE `key` = #{key, jdbcType=BIGINT}
     </delete>
+
+    <update id="update" parameterType="com.mfanw.element.dao.entity.SecurityRoleEntity">
+        UPDATE security_role SET
+        name = #{name, jdbcType=VARCHAR},
+        description = #{description, jdbcType=VARCHAR},
+        status = #{status, jdbcType=INTEGER}
+        WHERE `key` = #{key, jdbcType=BIGINT}
+    </update>
 
     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT
         <include refid="BaseColumnList"/>
         FROM security_role
-        WHERE key = #{key, jdbcType=BIGINT}
+        WHERE `key` = #{key, jdbcType=BIGINT}
     </select>
 
     <select id="getList" resultMap="BaseResultMap">

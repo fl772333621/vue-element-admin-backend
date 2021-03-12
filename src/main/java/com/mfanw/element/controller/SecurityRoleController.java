@@ -3,6 +3,7 @@ package com.mfanw.element.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.mfanw.element.dao.convertor.Entity2FormConvertor;
+import com.mfanw.element.dao.convertor.Json2EntityConvertor;
 import com.mfanw.element.dao.entity.SecurityRoleEntity;
 import com.mfanw.element.dao.entity.SecurityRouteEntity;
 import com.mfanw.element.dao.mapper.SecurityRoleMapper;
@@ -59,14 +60,23 @@ public class SecurityRoleController {
         securityRoleEntity.setName(MapUtils.getString(jsonParam, "name", "name"));
         securityRoleEntity.setDescription(MapUtils.getString(jsonParam, "description", "description"));
         securityRoleMapper.insert(securityRoleEntity);
-        return JsonResult.success(null);
+        return JsonResult.success(securityRoleMapper.getById(securityRoleEntity.getKey()));
     }
 
     @DeleteMapping("/role/{key}")
     @ResponseBody
-    public JsonResult roleDelete(@PathVariable(value = "key", required = false) Long key) {
+    public JsonResult roleDelete(@PathVariable("key") Long key) {
         // role
         securityRoleMapper.delete(key);
+        return JsonResult.success(null);
+    }
+
+    @PutMapping("/role/{key}")
+    @ResponseBody
+    public JsonResult roleUpdate(@PathVariable("key") Long key, @RequestBody JSONObject jsonParam) {
+        // role
+        SecurityRoleEntity securityRoleEntity = Json2EntityConvertor.buildSecurityRoleEntity(jsonParam);
+        securityRoleMapper.update(securityRoleEntity);
         return JsonResult.success(null);
     }
 }

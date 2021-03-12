@@ -34,7 +34,7 @@
         <include refid="BaseColumnListWithName"/>, GROUP_CONCAT(security_role.`key`) as roles
         FROM security_route t, security_role_route, security_role
         WHERE t.id = security_role_route.routeId
-        AND security_role_route.roleKey = security_role.id
+        AND security_role_route.roleKey = security_role.key
         GROUP BY t.id
     </select>
 </mapper>

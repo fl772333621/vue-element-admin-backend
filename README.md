@@ -1,8 +1,12 @@
 # vue-element-admin 专用后端项目Demo
 
-https://github.com/PanJiaChen/vue-element-admin 该前端项目专用java后台实现。（基于提交的commit为 docs: add coupon @PanJiaChen committed on 8 Sep 2020）
-> 集成 security 和 jwt，没有使用数据库去校验用户是否合法，仅靠代码判断。<br />
-> 如下步骤将引导你让前后端项目配合跑起来~~
+https://github.com/PanJiaChen/vue-element-admin 该前端项目专用java后台实现。（基于提交的commit为 docs: add coupon @PanJiaChen committed on
+8 Sep 2020）
+> 集成 security 和 jwt。<br />
+> 完成跨域支持。<br />
+> 支持MySQL数据库，支持密码登陆校验<br />
+
+如下步骤将引导你让前后端项目配合跑起来~~
 
 ## 第一步、vue-element-admin 项目启动
 

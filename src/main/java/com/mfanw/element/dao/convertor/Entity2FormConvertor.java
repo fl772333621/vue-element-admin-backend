@@ -13,6 +13,11 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Entity数据转换为Form数据
+ *
+ * @author mengwei
+ */
 public class Entity2FormConvertor {
 
     public static SecurityUserForm buildSecurityUserForm(SecurityUserEntity securityUserEntity, List<SecurityRoleEntity> securityRoleEntities) {
@@ -70,6 +75,9 @@ public class Entity2FormConvertor {
         securityRouteMetaForm.setTitle(securityRouteEntity.getTitle());
         securityRouteMetaForm.setIcon(securityRouteEntity.getIcon());
         return securityRouteMetaForm;
+    }
+
+    private Entity2FormConvertor() {
     }
 
 }

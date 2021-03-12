@@ -19,5 +19,10 @@ public interface SecurityRouteMapper {
      */
     SecurityRouteEntity getById(long id);
 
+    /**
+     * 获取列表
+     *
+     * @return 列表结果
+     */
     List<SecurityRouteEntity> getList();
 }

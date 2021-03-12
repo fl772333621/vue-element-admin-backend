@@ -4,6 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.mfanw.element.dao.entity.SecurityRoleEntity;
 import org.apache.commons.collections.MapUtils;
 
+/**
+ * JSON数据转换为Entity
+ *
+ * @author mengwei
+ */
 public class Json2EntityConvertor {
 
     public static SecurityRoleEntity buildSecurityRoleEntity(JSONObject jsonParam) {
@@ -13,5 +18,8 @@ public class Json2EntityConvertor {
         securityRoleEntity.setDescription(MapUtils.getString(jsonParam, "description"));
         securityRoleEntity.setStatus(MapUtils.getInteger(jsonParam, "status"));
         return securityRoleEntity;
+    }
+
+    private Json2EntityConvertor() {
     }
 }

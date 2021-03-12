@@ -7,6 +7,11 @@ import lombok.ToString;
 
 import java.util.Date;
 
+/**
+ * 权限专用页面Form
+ *
+ * @author mengwei
+ */
 @Getter
 @Setter
 @ToString

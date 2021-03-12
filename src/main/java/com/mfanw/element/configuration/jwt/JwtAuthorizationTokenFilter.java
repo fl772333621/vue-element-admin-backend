@@ -1,6 +1,6 @@
 package com.mfanw.element.configuration.jwt;
 
-import com.mfanw.element.consts.CommonConsts;
+import com.mfanw.element.consts.CommonConst;
 import com.mfanw.element.util.JwtTokenUtil;
 import com.mfanw.element.util.ThreadLocalUtil;
 import org.apache.commons.lang.StringUtils;
@@ -52,7 +52,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         // SecurityConfig.configure()内配置了/helloPermitAll不需要权限校验，所以request.getHeader(TOKEN)必定为null
         final String authToken = getToken(request);
         LOGGER.warn("Method={}, URI={}, token={}", request.getMethod(), request.getRequestURI(), authToken);
-        if (!StringUtils.equals(request.getMethod(), CommonConsts.OPTIONS) && authToken != null) {
+        if (!StringUtils.equals(request.getMethod(), CommonConst.OPTIONS) && authToken != null) {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             ThreadLocalUtil.getInstance().setUsername(username);
             LOGGER.warn("username = {}", username);
@@ -69,7 +69,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
-        if (StringUtils.equals(request.getMethod(), CommonConsts.OPTIONS)) {
+        if (StringUtils.equals(request.getMethod(), CommonConst.OPTIONS)) {
             return null;
         }
         String token = request.getHeader(this.tokenHeader);

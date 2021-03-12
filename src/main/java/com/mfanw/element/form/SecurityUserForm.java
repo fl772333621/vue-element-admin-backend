@@ -8,6 +8,11 @@ import lombok.ToString;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 权限专用用户Form
+ *
+ * @author mengwei
+ */
 @Getter
 @Setter
 @ToString

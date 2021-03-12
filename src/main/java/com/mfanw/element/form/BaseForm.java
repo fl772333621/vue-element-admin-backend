@@ -5,6 +5,8 @@ import com.alibaba.druid.support.json.JSONUtils;
 import java.io.Serializable;
 
 /**
+ * 基础数据结构
+ *
  * @author mengwei
  */
 public class BaseForm implements Serializable {

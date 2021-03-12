@@ -7,6 +7,11 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * 权限专用角色Form
+ *
+ * @author mengwei
+ */
 @Getter
 @Setter
 @ToString

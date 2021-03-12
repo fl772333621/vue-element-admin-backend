@@ -5,6 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 权限专用页面元素Form
+ *
+ * @author mengwei
+ */
 @Getter
 @Setter
 @ToString

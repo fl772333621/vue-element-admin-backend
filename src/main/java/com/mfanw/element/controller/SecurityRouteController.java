@@ -20,7 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SecurityRouteController {
 
     @Autowired
-    private SecurityRouteMapper securityRouteMapper;
+    private final SecurityRouteMapper securityRouteMapper;
+
+    public SecurityRouteController(SecurityRouteMapper securityRouteMapper) {
+        this.securityRouteMapper = securityRouteMapper;
+    }
 
     @GetMapping("/routes")
     @ResponseBody

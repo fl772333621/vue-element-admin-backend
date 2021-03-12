@@ -11,7 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -31,17 +30,22 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUserDetailsServiceImpl.class);
 
     @Autowired
-    private SecurityUserMapper securityUserMapper;
+    private final SecurityUserMapper securityUserMapper;
 
     @Autowired
-    private SecurityRoleMapper securityRoleMapper;
+    private final SecurityRoleMapper securityRoleMapper;
+
+    public JwtUserDetailsServiceImpl(SecurityUserMapper securityUserMapper, SecurityRoleMapper securityRoleMapper) {
+        this.securityUserMapper = securityUserMapper;
+        this.securityRoleMapper = securityRoleMapper;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LOGGER.warn(username);
+    public UserDetails loadUserByUsername(String username) {
+        LOGGER.warn("username={}", username);
         SecurityUserEntity securityUserEntity = securityUserMapper.getByUsername(username);
         if (securityUserEntity == null) {
-            LOGGER.warn(username + ",无法找到用户");
+            LOGGER.warn("username={}无法找到用户", username);
             return null;
         }
         // 角色配置

@@ -1,18 +1,20 @@
 package com.mfanw.element.util;
 
+import com.google.common.collect.Maps;
 import com.mfanw.element.configuration.jwt.SecurityUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Clock;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.DefaultClock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -22,6 +24,8 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil implements Serializable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtTokenUtil.class);
+
     private static final long serialVersionUID = -3301605591108950415L;
 
     @Value("${jwt.secret}")
@@ -30,15 +34,15 @@ public class JwtTokenUtil implements Serializable {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    private final Clock clock = DefaultClock.INSTANCE;
+    private static final Clock CLOCK = DefaultClock.INSTANCE;
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = Maps.newHashMap();
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
-        final Date createdDate = clock.now();
+        final Date createdDate = CLOCK.now();
         final Date expirationDate = calculateExpirationDate(createdDate);
 
         return Jwts.builder()
@@ -54,11 +58,10 @@ public class JwtTokenUtil implements Serializable {
         return new Date(createdDate.getTime() + expiration);
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) {
         SecurityUserDetails user = (SecurityUserDetails) userDetails;
         final String username = getUsernameFromToken(token);
-        return (username.equals(user.getUsername()) && !isTokenExpired(token)
-        );
+        return username.equals(user.getUsername()) && !isTokenExpired(token);
     }
 
     public String getUsernameFromToken(String token) {
@@ -81,15 +84,15 @@ public class JwtTokenUtil implements Serializable {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
             return null;
         }
     }
 
 
     private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(clock.now());
+        final Date expirationDateFromToken = getExpirationDateFromToken(token);
+        return expirationDateFromToken.before(CLOCK.now());
     }
 
     public Date getExpirationDateFromToken(String token) {

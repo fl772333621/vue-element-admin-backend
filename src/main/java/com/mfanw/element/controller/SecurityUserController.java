@@ -33,19 +33,29 @@ import java.util.Map;
 public class SecurityUserController {
 
     @Autowired
-    private JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
+    private final JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private SecurityRoleMapper securityRoleMapper;
+    private final SecurityRoleMapper securityRoleMapper;
 
     @Autowired
-    private SecurityUserMapper securityUserMapper;
+    private final SecurityUserMapper securityUserMapper;
 
     @Autowired
-    private PasswordEncoder passwordEncoderBean;
+    private final PasswordEncoder passwordEncoderBean;
+
+    public SecurityUserController(JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl,
+                                  JwtTokenUtil jwtTokenUtil, SecurityRoleMapper securityRoleMapper,
+                                  SecurityUserMapper securityUserMapper, PasswordEncoder passwordEncoderBean) {
+        this.jwtUserDetailsServiceImpl = jwtUserDetailsServiceImpl;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.securityRoleMapper = securityRoleMapper;
+        this.securityUserMapper = securityUserMapper;
+        this.passwordEncoderBean = passwordEncoderBean;
+    }
 
     /**
      * 用户登录校验 <br />

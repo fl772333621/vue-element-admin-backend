@@ -29,10 +29,15 @@ import java.util.List;
 public class SecurityRoleController {
 
     @Autowired
-    private SecurityRoleMapper securityRoleMapper;
+    private final SecurityRoleMapper securityRoleMapper;
 
     @Autowired
-    private SecurityRouteMapper securityRouteMapper;
+    private final SecurityRouteMapper securityRouteMapper;
+
+    public SecurityRoleController(SecurityRoleMapper securityRoleMapper, SecurityRouteMapper securityRouteMapper) {
+        this.securityRoleMapper = securityRoleMapper;
+        this.securityRouteMapper = securityRouteMapper;
+    }
 
     @GetMapping("/roles")
     @ResponseBody

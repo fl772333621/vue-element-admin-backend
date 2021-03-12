@@ -24,11 +24,12 @@ public class TransactionController {
     @GetMapping("/list")
     @ResponseBody
     public JsonResult list() {
+        int count = 19;
         Map<String, Object> data = Maps.newHashMap();
-        data.put("total", 13);
+        data.put("total", count);
         List<Map<String, Object>> items = Lists.newArrayList();
         String[] status = new String[]{"pending", "success"};
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < count; i++) {
             Map<String, Object> item = Maps.newHashMap();
             item.put("order_no", UUID.randomUUID().toString());
             item.put("timestamp", System.currentTimeMillis());

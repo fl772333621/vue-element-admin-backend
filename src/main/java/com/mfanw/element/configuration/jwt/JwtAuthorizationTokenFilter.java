@@ -1,5 +1,6 @@
 package com.mfanw.element.configuration.jwt;
 
+import com.mfanw.element.consts.CommonConsts;
 import com.mfanw.element.util.JwtTokenUtil;
 import com.mfanw.element.util.ThreadLocalUtil;
 import org.apache.commons.lang.StringUtils;
@@ -28,16 +29,20 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthorizationTokenFilter.class);
 
     @Autowired
-    private JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
+    private final JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     private final String tokenHeader;
 
-    public JwtAuthorizationTokenFilter(@Value("${jwt.token}") String tokenHeader) {
+    public JwtAuthorizationTokenFilter(JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl,
+                                       JwtTokenUtil jwtTokenUtil,
+                                       @Value("${jwt.token}") String tokenHeader) {
+        this.jwtUserDetailsServiceImpl = jwtUserDetailsServiceImpl;
+        this.jwtTokenUtil = jwtTokenUtil;
         this.tokenHeader = tokenHeader;
-        LOGGER.warn("tokenHeader=" + tokenHeader);
+        LOGGER.warn(tokenHeader);
     }
 
     @Override
@@ -46,14 +51,14 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         // SecurityConfig.configure()内配置了/hello需要权限校验，所以request.getHeader(TOKEN)必定有值，如果没有获取到""
         // SecurityConfig.configure()内配置了/helloPermitAll不需要权限校验，所以request.getHeader(TOKEN)必定为null
         final String authToken = getToken(request);
-        LOGGER.warn(request.getMethod() + " ," + request.getRequestURI() + ", authToken=" + authToken);
-        if (!request.getMethod().equals("OPTIONS") && authToken != null) {
+        LOGGER.warn("Method={}, URI={}, token={}", request.getMethod(), request.getRequestURI(), authToken);
+        if (!StringUtils.equals(request.getMethod(), CommonConsts.OPTIONS) && authToken != null) {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             ThreadLocalUtil.getInstance().setUsername(username);
-            LOGGER.warn("username=" + username);
+            LOGGER.warn("username = {}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(username);
-                LOGGER.warn("userDetails=" + userDetails);
+                LOGGER.warn("userDetails = {}", userDetails);
                 if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -64,7 +69,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     }
 
     private String getToken(HttpServletRequest request) {
-        if (request.getMethod().equals("OPTIONS")) {
+        if (StringUtils.equals(request.getMethod(), CommonConsts.OPTIONS)) {
             return null;
         }
         String token = request.getHeader(this.tokenHeader);

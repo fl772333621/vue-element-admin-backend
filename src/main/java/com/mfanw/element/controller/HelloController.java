@@ -8,8 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,8 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 @Api(tags = "JWT 演示接口")
 @Controller
 public class HelloController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
     private final JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;

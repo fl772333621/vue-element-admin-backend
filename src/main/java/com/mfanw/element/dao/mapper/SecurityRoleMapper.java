@@ -11,6 +11,10 @@ import java.util.List;
  */
 public interface SecurityRoleMapper {
 
+    void insert(SecurityRoleEntity securityRoleEntity);
+
+    void delete(Long key);
+
     /**
      * 根据角色ID获取角色实体
      *
@@ -22,4 +26,5 @@ public interface SecurityRoleMapper {
     List<SecurityRoleEntity> getList();
 
     List<SecurityRoleEntity> getListByUserId(long userId);
+
 }

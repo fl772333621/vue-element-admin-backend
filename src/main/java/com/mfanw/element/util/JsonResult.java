@@ -24,7 +24,7 @@ public class JsonResult {
 
     private Object data;
 
-    private String message;
+    private String message = "成功";
 
     public static JsonResult success(Object data) {
         JsonResult result = new JsonResult();

@@ -19,10 +19,7 @@ public class SecurityRoleEntity extends BaseForm {
     private static final long serialVersionUID = 5188936337858084402L;
 
     @ApiModelProperty(value = "角色ID")
-    private Long id;
-
-    @ApiModelProperty(value = "角色key")
-    private String key;
+    private Long key;
 
     @ApiModelProperty(value = "角色名称")
     private String name;

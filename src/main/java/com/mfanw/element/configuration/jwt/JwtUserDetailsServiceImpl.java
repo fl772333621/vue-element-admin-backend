@@ -48,7 +48,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
         List<SecurityRoleEntity> roles = securityRoleMapper.getListByUserId(securityUserEntity.getId());
         List<GrantedAuthority> authorityList = new ArrayList<>();
         if (CollectionUtils.isEmpty(roles)) {
-            authorityList.addAll(roles.stream().map(SecurityRoleEntity::getKey).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+            authorityList.addAll(roles.stream().map(SecurityRoleEntity::getName).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
         }
         // 返回对象
         SecurityUserDetails securityUserDetails = new SecurityUserDetails(securityUserEntity.getUsername(), authorityList);

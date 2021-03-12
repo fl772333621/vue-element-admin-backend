@@ -7,17 +7,14 @@ import com.mfanw.element.dao.entity.SecurityRoleEntity;
 import com.mfanw.element.dao.entity.SecurityRouteEntity;
 import com.mfanw.element.dao.mapper.SecurityRoleMapper;
 import com.mfanw.element.dao.mapper.SecurityRouteMapper;
-import com.mfanw.element.dao.mapper.SecurityUserMapper;
 import com.mfanw.element.enums.EnumErrorResult;
 import com.mfanw.element.form.SecurityRoleForm;
 import com.mfanw.element.util.JsonResult;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,9 +29,6 @@ public class SecurityRoleController {
 
     @Autowired
     private SecurityRoleMapper securityRoleMapper;
-
-    @Autowired
-    private SecurityUserMapper securityUserMapper;
 
     @Autowired
     private SecurityRouteMapper securityRouteMapper;
@@ -57,4 +51,22 @@ public class SecurityRoleController {
         return JsonResult.success(securityRoleForms);
     }
 
+    @PostMapping("/role")
+    @ResponseBody
+    public JsonResult roleInsert(@RequestBody(required = false) JSONObject jsonParam) {
+        // role
+        SecurityRoleEntity securityRoleEntity = new SecurityRoleEntity();
+        securityRoleEntity.setName(MapUtils.getString(jsonParam, "name", "name"));
+        securityRoleEntity.setDescription(MapUtils.getString(jsonParam, "description", "description"));
+        securityRoleMapper.insert(securityRoleEntity);
+        return JsonResult.success(null);
+    }
+
+    @DeleteMapping("/role/{key}")
+    @ResponseBody
+    public JsonResult roleDelete(@PathVariable(value = "key", required = false) Long key) {
+        // role
+        securityRoleMapper.delete(key);
+        return JsonResult.success(null);
+    }
 }

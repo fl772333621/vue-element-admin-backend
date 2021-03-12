@@ -26,7 +26,7 @@ public class Entity2FormConvertor {
         securityUserForm.setCreateTime(securityUserEntity.getCreateTime());
         securityUserForm.setModifyTime(securityUserEntity.getModifyTime());
         securityUserForm.setStatus(securityUserEntity.getStatus());
-        securityUserForm.setRoles(securityRoleEntities.stream().map(SecurityRoleEntity::getKey).collect(Collectors.toList()));
+        securityUserForm.setRoles(securityRoleEntities.stream().map(SecurityRoleEntity::getName).collect(Collectors.toList()));
         return securityUserForm;
     }
 

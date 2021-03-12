@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mfanw.element.dao.mapper.SecurityRoleMapper">
     <resultMap id="BaseResultMap" type="com.mfanw.element.dao.entity.SecurityRoleEntity">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="key" jdbcType="VARCHAR" property="key"/>
+        <id column="key" jdbcType="BIGINT" property="key"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="createTime" jdbcType="TIMESTAMP" property="createTime"/>
@@ -12,18 +11,28 @@
     </resultMap>
 
     <sql id="BaseColumnList">
-        id, `key`, name, description, createTime, modifyTime, status
+        `key`, name, description, createTime, modifyTime, status
     </sql>
 
     <sql id="BaseColumnListWithName">
-        t.id, t.`key`, t.name, t.description, t.createTime, t.modifyTime, t.status
+        t.`key`, t.name, t.description, t.createTime, t.modifyTime, t.status
     </sql>
+
+    <insert id="insert" parameterType="com.mfanw.element.dao.entity.SecurityRoleEntity">
+        INSERT INTO
+        security_role (name, description)
+        VALUES (#{name, jdbcType=VARCHAR}, #{description, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM security_role WHERE key = #{key, jdbcType=BIGINT}
+    </delete>
 
     <select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT
         <include refid="BaseColumnList"/>
         FROM security_role
-        WHERE id = #{id, jdbcType=BIGINT}
+        WHERE key = #{key, jdbcType=BIGINT}
     </select>
 
     <select id="getList" resultMap="BaseResultMap">
@@ -36,7 +45,7 @@
         SELECT
         <include refid="BaseColumnListWithName"/>
         FROM security_role t, security_user_role
-        WHERE t.id = security_user_role.roleId
+        WHERE t.key = security_user_role.roleKey
         AND security_user_role.userId = #{userId, jdbcType=BIGINT}
     </select>
 </mapper>

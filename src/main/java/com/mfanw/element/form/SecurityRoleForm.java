@@ -10,10 +10,10 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class SecurityRoleForm extends BaseForm{
+public class SecurityRoleForm extends BaseForm {
 
-    @ApiModelProperty(value = "角色key")
-    private String key;
+    @ApiModelProperty(value = "角色ID")
+    private Long key;
 
     @ApiModelProperty(value = "角色名称")
     private String name;

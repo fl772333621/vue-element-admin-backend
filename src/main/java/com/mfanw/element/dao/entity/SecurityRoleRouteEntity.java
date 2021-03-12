@@ -17,7 +17,7 @@ public class SecurityRoleRouteEntity extends BaseForm {
     private static final long serialVersionUID = 7826800453103806832L;
 
     @ApiModelProperty(value = "角色ID")
-    private String roleId;
+    private String roleKey;
 
     @ApiModelProperty(value = "页面ID")
     private Long routeId;

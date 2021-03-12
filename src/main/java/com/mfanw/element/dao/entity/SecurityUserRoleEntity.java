@@ -20,6 +20,6 @@ public class SecurityUserRoleEntity extends BaseForm {
     private Long userId;
 
     @ApiModelProperty(value = "角色ID")
-    private String roleId;
+    private String roleKey;
 
 }

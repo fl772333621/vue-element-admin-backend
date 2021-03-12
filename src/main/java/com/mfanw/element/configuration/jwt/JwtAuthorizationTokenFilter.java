@@ -55,10 +55,10 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         if (!StringUtils.equals(request.getMethod(), CommonConst.OPTIONS) && authToken != null) {
             String username = jwtTokenUtil.getUsernameFromToken(authToken);
             ThreadLocalUtil.getInstance().setUsername(username);
-            LOGGER.warn("username = {}", username);
+            LOGGER.warn("username={}", username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(username);
-                LOGGER.warn("userDetails = {}", userDetails);
+                LOGGER.warn("userDetails={}", userDetails);
                 if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);

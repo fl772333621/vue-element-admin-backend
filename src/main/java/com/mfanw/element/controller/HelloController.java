@@ -2,6 +2,7 @@ package com.mfanw.element.controller;
 
 import com.mfanw.element.configuration.jwt.JwtUserDetailsServiceImpl;
 import com.mfanw.element.dao.mapper.SecurityUserMapper;
+import com.mfanw.element.enums.EnumErrorResult;
 import com.mfanw.element.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,13 +31,24 @@ public class HelloController {
     private static final Logger LOGGER = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
-    private JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
+    private final JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl;
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private SecurityUserMapper securityUserMapper;
+    private final SecurityUserMapper securityUserMapper;
+
+    @Autowired
+    private final PasswordEncoder passwordEncoderBean;
+
+    public HelloController(JwtUserDetailsServiceImpl jwtUserDetailsServiceImpl, JwtTokenUtil jwtTokenUtil,
+                           SecurityUserMapper securityUserMapper, PasswordEncoder passwordEncoderBean) {
+        this.jwtUserDetailsServiceImpl = jwtUserDetailsServiceImpl;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.securityUserMapper = securityUserMapper;
+        this.passwordEncoderBean = passwordEncoderBean;
+    }
 
     @ApiOperation("登陆请求")
     @ApiImplicitParams({
@@ -45,9 +58,14 @@ public class HelloController {
     @PostMapping("/doLogin")
     @ResponseBody
     public String doLogin(HttpServletRequest request, String username, String password) {
+        // 加载用户
         final UserDetails userDetails = jwtUserDetailsServiceImpl.loadUserByUsername(username);
-        if (username.length() != password.length()) {
-            return "密码错误，请重新输入！";
+        if (userDetails == null) {
+            return EnumErrorResult.USERNAME_NOT_FOUND.getMessage();
+        }
+        // 登陆密码校验
+        if (!passwordEncoderBean.matches(password, userDetails.getPassword())) {
+            return EnumErrorResult.LOGIN_PASSWORD_ERROR.getMessage();
         }
         return jwtTokenUtil.generateToken(userDetails);
     }
@@ -63,7 +81,6 @@ public class HelloController {
     @PostMapping("/helloPermitAll")
     @ResponseBody
     public String helloPermitAll() {
-        LOGGER.warn(securityUserMapper.getByUsername("admin").toString());
-        return "hello 陌生人~";
+        return "hello 陌生人~" + securityUserMapper.getByUsername("admin").toString();
     }
 }
